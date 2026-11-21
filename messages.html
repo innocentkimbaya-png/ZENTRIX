@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ZENTRIX - Messages</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Helvetica,Arial,sans-serif;background:#F2F4F7;padding-bottom:64px;color:#111827}
+/* === PROFESSIONAL BARS - NAVY + WHITE === */
+.bar{background:#fff;display:flex;align-items:center;box-shadow:0 1px 6px rgba(0,0,0,.07);position:sticky;z-index:30}
+.bar-top{top:0;padding:9px 14px;gap:10px;background:#0A1A2F;color:#fff}
+.logo{font-size:21px;font-weight:900;letter-spacing:.5px;white-space:nowrap}
+.logo span{color:#3B82F6}
+.search{flex:1;min-width:0;background:#F2F4F7;border-radius:999px;padding:8px 12px;display:flex;gap:6px;align-items:center;color:#6B7280}
+.search input{border:0;background:transparent;outline:0;width:100%;font-size:14px;color:#111827}
+.ico{width:34px;height:34px;border-radius:50%;background:#fff;color:#0A1A2F;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;cursor:pointer;flex-shrink:0}
+.bar-tabs{top:52px;justify-content:space-around;padding:0;background:#fff;border-bottom:1px solid #E5E7EB}
+.bar-tabs button{flex:1;border:0;background:#fff;padding:11px 2px;font-size:13px;font-weight:600;color:#6B7280;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.bar-tabs button.on{color:#0A1A2F;border-bottom-color:#2563EB}
+.bar-bottom{position:fixed;bottom:0;left:0;right:0;justify-content:space-around;padding:7px 0 8px;border-top:1px solid #E5E7EB;background:#fff}
+.bar-bottom span{text-align:center;font-size:11px;color:#6B7280;cursor:pointer;font-weight:600;line-height:1.2}
+.bar-bottom span.on{color:#2563EB}
+.bar-bottom i{font-style:normal;font-size:17px;display:block;line-height:1}
+/* HEADER - PROFESSIONAL, NOT BIG GREEN */
+.head{margin:12px 12px 0;background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:16px}
+.head h2{font-size:20px;color:#0A1A2F}
+.head p{font-size:13px;color:#6B7280;margin-top:6px;line-height:1.6}
+.me-pill{display:inline-block;margin-top:10px;background:#EFF6FF;color:#1D4ED8;padding:6px 11px;border-radius:999px;font-size:12px;font-weight:700}
+.subtabs{display:flex;background:#fff;margin:12px;border-radius:999px;padding:4px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid #E5E7EB}
+.subtabs button{flex:1;border:0;background:transparent;padding:9px;border-radius:999px;font-weight:700;cursor:pointer;font-size:13px;color:#6B7280}
+.subtabs button.on{background:#0A1A2F;color:#fff}
+.card{background:#fff;margin:12px;border-radius:16px;padding:14px;box-shadow:0 1px 6px rgba(0,0,0,.05);border:1px solid #E5E7EB}
+.card h3{font-size:15px;color:#0A1A2F}
+.card p{font-size:13px;color:#6B7280;margin-top:4px;line-height:1.5}
+.ava{width:44px;height:44px;border-radius:50%;background:#0A1A2F;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;overflow:hidden;flex-shrink:0;position:relative}
+.ava img{width:100%;height:100%;object-fit:cover}
+.ava.small{width:36px;height:36px;font-size:13px}
+.dot{position:absolute;bottom:0;right:0;width:11px;height:11px;border-radius:50%;background:#22C55E;border:2px solid #fff}
+.row{display:flex;gap:11px;align-items:center;padding:11px 0;border-bottom:1px solid #F3F4F6}
+.row:last-child{border:0}
+.btn{border:0;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer;font-size:13px}
+.btn-blue{background:#2563EB;color:#fff}
+.btn-navy{background:#0A1A2F;color:#fff}
+.btn-grey{background:#F3F4F6;color:#111827}
+input{width:100%;padding:11px;border:1px solid #E5E7EB;border-radius:12px;outline:none;font-size:14px}
+input:focus{border-color:#2563EB}
+.badge{background:#EF4444;color:#fff;font-size:11px;padding:2px 7px;border-radius:999px;font-weight:800}
+.chatbox{background:#fff;margin:12px;border-radius:18px;padding:14px;display:none;box-shadow:0 4px 20px rgba(0,0,0,.08);border:1px solid #E5E7EB}
+.chat-head{display:flex;gap:10px;align-items:center;padding-bottom:12px;border-bottom:1px solid #F3F4F6}
+.msgs{max-height:340px;overflow:auto;padding:12px 0;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:80%;padding:10px 13px;border-radius:18px;font-size:14px;line-height:1.45}
+.msg.me{background:#0A1A2F;color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+.msg.them{background:#F3F4F6;align-self:flex-start;border-bottom-left-radius:5px}
+.msg audio{width:170px}
+.smart{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.smart button{border:1px solid #D1D5DB;background:#fff;color:#111827;padding:7px 11px;border-radius:999px;font-size:12px;font-weight:600;cursor:pointer}
+.chat-input{display:flex;gap:8px;margin-top:10px;align-items:center}
+.chat-input input{flex:1;background:#F9FAFB}
+.iconbtn{width:42px;height:42px;border-radius:50%;border:0;background:#F3F4F6;font-size:16px;cursor:pointer;flex-shrink:0}
+.iconbtn.rec{background:#EF4444;color:#fff}
+.callbox{background:#EFF6FF;border:1px solid #BFDBFE;border-radius:14px;padding:14px;margin-top:10px;display:none;text-align:center}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR - PROFESSIONAL NAVY -->
+<div class="bar bar-top"><div class="logo">ZENTRIX<span>.</span></div><div class="search"><span>Search</span><input id="searchInput" oninput="doSearch()" placeholder="Search people..."></div><div class="ico" onclick="location.href='messages.html'">Msg</div><div class="ico" onclick="location.href='home.html'">P</div></div>
+
+<!-- TABS BAR -->
+<div class="bar bar-tabs"><button onclick="location.href='home.html'">Home</button><button class="on">Messages</button><button onclick="location.href='watch.html'">Watch</button><button onclick="location.href='market.html'">Market</button><button onclick="location.href='food.html'">Food</button><button onclick="alert('Tickets coming soon')">Tickets</button></div>
+
+<!-- PROFESSIONAL HEADER - NO BIG GREEN -->
+<div class="head"><h2>Messages</h2><p>Real people only. A person must login, search your name, send a request, you confirm — then you can chat. No fake users.</p><span class="me-pill" id="meInfo">You: Guest</span></div>
+
+<div class="subtabs"><button id="tabChats" class="on" onclick="showSection('chats')">Chats</button><button id="tabReq" onclick="showSection('requests')">Requests</button><button id="tabPeople" onclick="showSection('people')">Find People</button></div>
+
+<div id="secChats"><div class="card"><h3>Your Chats</h3><p>Only confirmed friends can chat here. No confirm = No chat.</p><div id="chatList"></div><div id="noChats" style="text-align:center;padding:18px;color:#6B7280;font-size:14px;line-height:1.6">No chats yet.<br>Ask a friend to login, search your name, send request, you confirm — then chat appears here.</div></div></div>
+
+<div id="secRequests" style="display:none">
+<div class="card"><h3>Friend Requests For You <span class="badge" id="reqBadge">0</span></h3><p>Real requests from real logged-in users.</p><div id="reqList"></div></div>
+<div class="card"><h3>Requests You Sent</h3><p>Waiting for them to confirm.</p><div id="sentList"></div></div>
+</div>
+
+<div id="secPeople" style="display:none">
+<div class="card"><h3>Find Real People</h3><p>Search by name. Only people who created a ZENTRIX account will show.</p><br><input id="findInput" oninput="renderPeople()" placeholder="Type a name, Enter your full name"><div id="peopleList" style="margin-top:10px"></div></div>
+<div class="card"><h3>How It Works</h3><p>1. Your friend logs in on their phone<br>2. They come to Messages > Find People<br>3. They search YOUR name<br>4. They tap Add Friend<br>5. You see it in Requests > Confirm<br>6. Now both can chat</p></div>
+</div>
+
+<div class="chatbox" id="chatBox">
+<div class="chat-head"><div class="ava small" id="chatAva">?</div><div style="flex:1"><b id="chatName">Friend</b><br><small style="color:#16A34A;font-weight:700">● Friend Confirmed • Can Chat</small></div><button class="btn btn-blue" onclick="startCall('Audio')">Audio</button><button class="btn btn-navy" onclick="startCall('Video')">Video</button></div>
+<div class="callbox" id="callBox"><h3 id="callTitle">Audio Call</h3><p id="callStatus" style="color:#6B7280;margin-top:6px">Calling...</p><br><button class="btn btn-grey" onclick="endCall()">End Call</button></div>
+<div class="msgs" id="msgs"></div>
+<div class="smart"><button onclick="quickSend('Hi! How are you?')">Hi! How are you?</button><button onclick="quickSend('I am good, thanks!')">I am good!</button><button onclick="quickSend('Let us talk on call')">Call me</button></div>
+<div class="chat-input"><button class="iconbtn" onclick="document.getElementById('chatPhoto').click()">Photo</button><input type="file" id="chatPhoto" accept="image/*" style="display:none" onchange="sendPhoto(this)"><input id="chatText" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendMsg()"><button class="iconbtn" id="voiceBtn" onclick="toggleVoice()">Voice</button><button class="btn btn-blue" onclick="sendMsg()">Send</button></div>
+<div style="font-size:12px;color:#6B7280;margin-top:8px;text-align:center">Voice: Tap to record, tap again to send</div>
+</div>
+
+<!-- BOTTOM BAR - FIXED, ONE WORD ONLY -->
+<div class="bar bar-bottom"><span onclick="location.href='home.html'"><i>Home</i>Home</span><span class="on" onclick="location.href='messages.html'"><i>Msg</i>Messages</span><span onclick="location.href='home.html'"><i>+</i>Post</span><span onclick="location.href='market.html'"><i>Shop</i>Market</span><span onclick="alert('Profile coming soon')"><i>You</i>Profile</span></div>
+
+<script>
+let mePhone=localStorage.getItem('zentrix_current');
+let users=JSON.parse(localStorage.getItem('zentrix_users')||'{}');
+let me=users[mePhone]||null;
+try{ if(!me) me=JSON.parse(localStorage.getItem('zentrix_user')||'null'); }catch(e){}
+if(me && !mePhone) mePhone=me.phone;
+let allRequests=JSON.parse(localStorage.getItem('zentrix_real_requests')||'[]');
+let allChats=JSON.parse(localStorage.getItem('zentrix_real_chats')||'{}');
+let currentFriendPhone=null, mediaRecorder=null, audioChunks=[], isRecording=false;
+function chatKey(a,b){return [a,b].sort().join('_');}
+function isFriends(a,b){return allRequests.some(r=> ((r.from===a && r.to===b)||(r.from===b && r.to===a)) && r.status==='accepted');}
+function myFriends(){let list=[];allRequests.forEach(r=>{if(r.status!=='accepted') return;if(r.from===mePhone) list.push({phone:r.to,name:r.toName,pic:r.toPic||''});if(r.to===mePhone) list.push({phone:r.from,name:r.fromName,pic:r.fromPic||''});});return list;}
+function myIncoming(){return allRequests.filter(r=>r.to===mePhone && r.status==='pending');}
+function mySent(){return allRequests.filter(r=>r.from===mePhone && r.status==='pending');}
+function save(){localStorage.setItem('zentrix_real_requests',JSON.stringify(allRequests));localStorage.setItem('zentrix_real_chats',JSON.stringify(allChats));}
+function showSection(s){document.getElementById('secChats').style.display=s==='chats'?'block':'none';document.getElementById('secRequests').style.display=s==='requests'?'block':'none';document.getElementById('secPeople').style.display=s==='people'?'block':'none';document.getElementById('tabChats').className=s==='chats'?'on':'';document.getElementById('tabReq').className=s==='requests'?'on':'';document.getElementById('tabPeople').className=s==='people'?'on':'';}
+function avaHTML(name,pic){ if(pic) return '<div class="ava"><img src="'+pic+'"><span class="dot"></span></div>'; return '<div class="ava">'+name.charAt(0).toUpperCase()+'<span class="dot"></span></div>';}
+function renderAll(){
+if(me) document.getElementById('meInfo').textContent='You: '+me.name+' • '+me.phone;
+let incoming=myIncoming(); let sent=mySent(); let friends=myFriends();
+document.getElementById('reqBadge').textContent=incoming.length;
+let reqEl=document.getElementById('reqList'); reqEl.innerHTML='';
+if(incoming.length===0) reqEl.innerHTML='<div style="text-align:center;padding:16px;color:#6B7280">No requests yet.<br>When someone searches your name and sends request, it will appear here.</div>';
+incoming.forEach(r=>{let idx=allRequests.indexOf(r);reqEl.innerHTML+='<div class="row">'+avaHTML(r.fromName,r.fromPic)+'<div style="flex:1"><b>'+r.fromName+'</b><br><small style="color:#6B7280">'+r.from+' • Wants to be your friend</small></div><button class="btn btn-blue" onclick="confirmReq('+idx+')">Confirm</button><button class="btn btn-grey" onclick="deleteReq('+idx+')">Delete</button></div>';});
+let sentEl=document.getElementById('sentList'); sentEl.innerHTML='';
+if(sent.length===0) sentEl.innerHTML='<div style="text-align:center;padding:12px;color:#6B7280">You have not sent any requests yet.</div>';
+sent.forEach(r=>{let idx=allRequests.indexOf(r); sentEl.innerHTML+='<div class="row">'+avaHTML(r.toName,r.toPic)+'<div style="flex:1"><b>'+r.toName+'</b><br><small style="color:#6B7280">Waiting for '+r.toName+' to confirm</small></div><button class="btn btn-grey" onclick="cancelReq('+idx+')">Cancel</button></div>';});
+let cEl=document.getElementById('chatList'); cEl.innerHTML='';
+document.getElementById('noChats').style.display=friends.length===0?'block':'none';
+friends.forEach(f=>{let key=chatKey(mePhone,f.phone); let last=(allChats[key]||[]).slice(-1)[0];let lastText=last?(last.type==='voice'?'Voice note':last.type==='photo'?'Photo':last.text):'Tap to chat - you are now friends';cEl.innerHTML+='<div class="row" style="cursor:pointer" onclick="openChat(\''+f.phone+'\',\''+f.name.replace(/'/g,"")+'\')">'+avaHTML(f.name,f.pic)+'<div style="flex:1"><b>'+f.name+'</b><br><small style="color:#6B7280">'+lastText+'</small></div><span style="color:#2563EB;font-weight:800">Chat ></span></div>';});
+renderPeople();
+}
+function renderPeople(){
+let q=(document.getElementById('findInput')?.value||'').toLowerCase();
+let el=document.getElementById('peopleList'); if(!el) return; el.innerHTML='';
+let allUsers=Object.values(users);
+if(!me){el.innerHTML='<div style="text-align:center;padding:16px;color:#6B7280">Please login first in index.html</div>';return;}
+if(allUsers.length<=1){el.innerHTML='<div style="text-align:center;padding:16px;color:#6B7280">No other users yet.<br>Ask a friend to create an account, then search their name here.</div>';return;}
+let shown=false;
+allUsers.forEach(u=>{if(u.phone===mePhone) return;if(q && !u.name.toLowerCase().includes(q) && !u.phone.includes(q)) return;shown=true;let already=isFriends(mePhone,u.phone);let pending=allRequests.some(r=>r.from===mePhone && r.to===u.phone && r.status==='pending');let incoming=allRequests.some(r=>r.from===u.phone && r.to===mePhone && r.status==='pending');let btn='';if(already) btn='<button class="btn btn-grey">Friends • Can Chat</button>';else if(pending) btn='<button class="btn btn-grey">Request Sent</button>';else if(incoming) btn='<button class="btn btn-blue" onclick="showSection(\'requests\')">Confirm Request</button>';else btn='<button class="btn btn-blue" onclick="sendTo(\''+u.phone+'\')">Add Friend</button>';el.innerHTML+='<div class="row">'+avaHTML(u.name,u.pic)+'<div style="flex:1"><b>'+u.name+'</b><br><small style="color:#6B7280">'+u.phone+'</small></div>'+btn+'</div>';});
+if(!shown) el.innerHTML='<div style="text-align:center;padding:16px;color:#6B7280">No person found for "'+q+'".</div>';
+}
+function sendTo(toPhone){if(!me){alert('Login first.');return;}if(allRequests.some(r=>r.from===mePhone && r.to===toPhone && r.status==='pending')){alert('Request already sent.');return;}let toUser=users[toPhone];allRequests.push({from:mePhone,to:toPhone,fromName:me.name,fromPic:me.pic||'',toName:toUser.name,toPic:toUser.pic||'',status:'pending'});save();renderAll();alert('Friend request sent to '+toUser.name+'. Wait for them to confirm. You CANNOT chat until they confirm.');}
+function confirmReq(idx){allRequests[idx].status='accepted'; save(); renderAll();alert('Confirmed! You are now friends. You can now chat with '+allRequests[idx].fromName+'.');showSection('chats');}
+function deleteReq(idx){allRequests.splice(idx,1);save();renderAll();}
+function cancelReq(idx){allRequests.splice(idx,1);save();renderAll();}
+function openChat(phone,name){if(!isFriends(mePhone,phone)){alert('You cannot chat yet. '+name+' must confirm your friend request first.');return;}currentFriendPhone=phone;document.getElementById('chatBox').style.display='block';document.getElementById('chatName').textContent=name;let u=users[phone]; document.getElementById('chatAva').innerHTML=u && u.pic?'<img src="'+u.pic+'">':name.charAt(0).toUpperCase();renderMsgs(); window.scrollTo(0,document.body.scrollHeight);}
+function renderMsgs(){let key=chatKey(mePhone,currentFriendPhone); let list=allChats[key]||[];let box=document.getElementById('msgs'); box.innerHTML='';if(list.length===0) box.innerHTML='<div style="text-align:center;color:#6B7280;padding:16px">You are now friends!<br>Say hello. This chat is only between you two.</div>';list.forEach(m=>{if(m.type==='voice') box.innerHTML+='<div class="msg '+(m.from===mePhone?'me':'them')+'"><audio controls src="'+m.data+'"></audio><br><small>Voice note</small></div>';else if(m.type==='photo') box.innerHTML+='<div class="msg '+(m.from===mePhone?'me':'them')+'"><img src="'+m.data+'" style="width:180px;border-radius:12px"></div>';else box.innerHTML+='<div class="msg '+(m.from===mePhone?'me':'them')+'">'+m.text+'</div>';});box.scrollTop=box.scrollHeight; renderAll();}
+function quickSend(t){document.getElementById('chatText').value=t;sendMsg();}
+function sendMsg(){if(!currentFriendPhone){alert('Open a chat first.');return;}if(!isFriends(mePhone,currentFriendPhone)){alert('Cannot chat. Friend request not confirmed yet.');return;}let t=document.getElementById('chatText').value.trim();if(!t)return;let key=chatKey(mePhone,currentFriendPhone); if(!allChats[key]) allChats[key]=[];allChats[key].push({from:mePhone,text:t,type:'text'});save();document.getElementById('chatText').value='';renderMsgs();}
+function sendPhoto(input){let f=input.files[0];if(!f||!currentFriendPhone)return;let r=new FileReader();r.onload=e=>{let key=chatKey(mePhone,currentFriendPhone); if(!allChats[key]) allChats[key]=[]; allChats[key].push({from:mePhone,type:'photo',data:e.target.result});save();renderMsgs();};r.readAsDataURL(f);}
+async function toggleVoice(){if(!currentFriendPhone){alert('Open a confirmed friend chat first.');return;}if(!isRecording){try{let stream=await navigator.mediaDevices.getUserMedia({audio:true});mediaRecorder=new MediaRecorder(stream);audioChunks=[];isRecording=true;document.getElementById('voiceBtn').classList.add('rec');document.getElementById('voiceBtn').textContent='Stop';mediaRecorder.ondataavailable=e=>audioChunks.push(e.data);mediaRecorder.onstop=()=>{let blob=new Blob(audioChunks,{type:'audio/webm'});let reader=new FileReader();reader.onload=()=>{let key=chatKey(mePhone,currentFriendPhone); if(!allChats[key]) allChats[key]=[]; allChats[key].push({from:mePhone,type:'voice',data:reader.result});save();renderMsgs();};reader.readAsDataURL(blob);stream.getTracks().forEach(t=>t.stop());};mediaRecorder.start();alert('Recording... Tap Voice again to send.');}catch(e){alert('Microphone not allowed.');}}else{mediaRecorder.stop();isRecording=false;document.getElementById('voiceBtn').classList.remove('rec');document.getElementById('voiceBtn').textContent='Voice';}}
+function startCall(type){if(!currentFriendPhone){alert('Open a confirmed friend chat first.');return;}if(!isFriends(mePhone,currentFriendPhone)){alert('Cannot call. Friend must confirm first.');return;}document.getElementById('callBox').style.display='block';document.getElementById('callTitle').textContent=type+' Call';document.getElementById('callStatus').textContent='Calling... In real ZENTRIX, this will ring your friend.';}
+function endCall(){document.getElementById('callBox').style.display='none';alert('Call ended.');}
+function doSearch(){let q=document.getElementById('searchInput').value;document.getElementById('findInput').value=q;showSection('people');renderPeople();}
+renderAll();
+</script>
+<script>
+var M={home:'index.html',messages:'messages.html',msg:'messages.html',watch:'watch.html',market:'market.html',shop:'market.html',food:'food.html',tickets:'ticket.html',ticket:'ticket.html',suppliers:'suppliers.html'};
+document.addEventListener('click',function(e){
+ var t=e.target.closest('a,button,div,span');
+ if(!t) return;
+ var txt=t.textContent.trim().toLowerCase();
+ for(var k in M){ if(txt===k){ e.preventDefault(); e.stopPropagation(); location.href=M[k]; return; } }
+},true);
+window.alert=function(m){ if(String(m).includes('coming soon')) return; };
+</script></body>
+</html>

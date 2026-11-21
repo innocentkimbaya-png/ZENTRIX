@@ -1,0 +1,6 @@
+services:
+    - type: web
+    name: zentrix
+    env: static
+    buildCommand: ""
+    staticPublishPath: .

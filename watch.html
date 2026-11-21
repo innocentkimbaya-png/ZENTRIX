@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZENTRIX Watch - Safe</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#050508;color:#fff;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.top{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;gap:10px;padding:12px 14px;align-items:center;background:rgba(10,10,15,.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{font-weight:900;font-size:22px;letter-spacing:-.5px;background:linear-gradient(135deg,#FF4D6D,#D90429);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.logo span{color:#fff;-webkit-text-fill-color:#fff}
+.search{flex:1;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:9px 12px;color:#fff;font-size:13px;display:flex;gap:8px;align-items:center}
+.search input{border:0;outline:0;width:100%;background:transparent;color:#fff;font-size:13px}
+.search input::placeholder{color:rgba(255,255,255,.6)}
+.tabs{position:fixed;top:58px;left:0;right:0;z-index:20;display:flex;justify-content:center;gap:20px;padding:10px 0;font-weight:700;font-size:14px;background:rgba(5,5,8,.6);backdrop-filter:blur(15px)}
+.tabs span{opacity:.55;cursor:pointer;padding-bottom:5px;transition:.2s}.tabs span.on{opacity:1;border-bottom:2.5px solid #FF4D6D;color:#fff}
+.feed{height:100vh;overflow-y:scroll;scroll-snap-type:y mandatory;scrollbar-width:none}
+.feed::-webkit-scrollbar{display:none}
+.card{height:100vh;position:relative;scroll-snap-align:start;background:#0A0A12;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card video,.card img{width:100%;height:100%;object-fit:cover}
+.card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.9));pointer-events:none}
+.overlay{position:absolute;left:0;right:0;bottom:92px;padding:16px;z-index:5}
+.user{display:flex;gap:10px;align-items:center}
+.ava{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#FF4D6D,#D90429);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-weight:900;overflow:hidden;box-shadow:0 4px 14px rgba(217,4,41,.5)}
+.ava img{width:100%;height:100%;object-fit:cover}
+.follow{background:#fff;color:#000;border:0;border-radius:99px;padding:7px 14px;font-weight:800;font-size:12px;margin-left:6px;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.follow.on{background:#D90429;color:#fff}
+.actions{position:absolute;right:12px;bottom:140px;display:flex;flex-direction:column;gap:16px;align-items:center;z-index:10}
+.act{width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.actWrap{text-align:center;font-size:11px;font-weight:700;text-shadow:0 2px 6px #000}
+.btn{border:0;padding:12px;border-radius:12px;font-weight:800;cursor:pointer}.btnP{background:linear-gradient(135deg,#FF4D6D,#D90429);color:#fff}.btnW{background:#f1f1f1;color:#111}
+.upload{background:#fff;color:#111;margin:12px;border-radius:18px;padding:16px;display:none;box-shadow:0 10px 30px rgba(0,0,0,.5);position:relative;z-index:40}
+.upload input,.upload textarea{width:100%;padding:12px;border:1px solid #e5e5e5;border-radius:12px;margin-top:10px;font-family:inherit}
+.warn{background:#FFF0F3;border:1px solid #FFB3C1;color:#4A0D1A;padding:12px;border-radius:12px;font-size:12px;line-height:1.6;margin-top:10px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,15,.9);backdrop-filter:blur(20px);display:flex;justify-content:space-around;padding:10px 0 12px;border-top:1px solid rgba(255,255,255,.08);z-index:20}
+.bottom span{text-align:center;font-size:11px;color:#888;font-weight:700;line-height:1.2}.bottom span.on{color:#fff}
+</style></head><body>
+<div class="top"><div class="logo">ZENTRIX<span>.</span></div><span style="background:rgba(255,77,109,.15);color:#FF8FA3;border:1px solid rgba(255,77,109,.3);font-size:10px;font-weight:800;padding:4px 8px;border-radius:99px">● LIVE</span><div class="search"><span>🔍</span><input id="sIn" placeholder="Search by user name..." oninput="doSearch()"></div></div>
+<div class="tabs"><span class="on" onclick="setTab('For You',this)">For You</span><span onclick="setTab('Following',this)">Following</span><span onclick="setTab('Friends',this)">Friends</span><span onclick="setTab('Music',this)">Music</span><span onclick="setTab('Live',this)">Live</span></div>
+<div class="upload" id="upBox">
+<b>Upload MP4 Video - Safe Only</b>
+<div class="warn"><b>🚫 ZENTRIX Safe Rule - No Exceptions:</b><br>• NO naked person<br>• NO pornography / sex videos<br>• NO sexual content<br>• NO nude photos<br>If you try to post it, it will be BLOCKED. If you post it, your account will be reported.</div>
+<textarea id="cap" rows="2" placeholder="Caption, e.g. Kitwe Vibes #Zambia #fyp"></textarea>
+<input type="file" id="fv" accept="video/mp4,video/*" onchange="onVideo(this)">
+<video id="prev" controls style="width:100%;display:none;margin-top:8px;background:#000;border-radius:10px"></video>
+<div style="display:flex;gap:6px;margin-top:8px"><button class="btn btnP" style="flex:1" onclick="doUpload()">Post Video</button><button class="btn btnW" style="flex:1" onclick="openUpload()">Cancel</button></div>
+<p style="font-size:12px;color:#666;margin-top:6px">Search works by user name. Safe Filter is always ON.</p>
+</div>
+<div id="feed" class="feed"></div>
+<div onclick="openUpload()" style="position:fixed;bottom:72px;left:50%;transform:translateX(-50%);z-index:30;background:linear-gradient(135deg,#FF4D6D,#D90429);color:#fff;width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:900;box-shadow:0 8px 25px rgba(255,77,109,.6);border:3px solid #fff">+</div><div id="upChoice" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:50;background:#fff;color:#111;border-radius:24px 24px 0 0;padding:20px;box-shadow:0 -10px 30px rgba(0,0,0,.4)">
+<b style="font-size:18px">Create Video</b><p style="color:#666;font-size:13px;margin:6px 0 14px">Choose how you want to post</p>
+<button onclick="goCamera()" style="width:100%;padding:14px;border:0;border-radius:12px;background:#D90429;color:#fff;font-weight:800;font-size:15px;margin-bottom:8px">📷 Record With Camera</button>
+<button onclick="goGallery()" style="width:100%;padding:14px;border:1px solid #ddd;border-radius:12px;background:#fff;font-weight:800;font-size:15px;margin-bottom:8px">🎞️ Upload From Gallery</button>
+<button onclick="closeChoice()" style="width:100%;padding:12px;border:0;background:transparent;font-weight:700;color:#666">Cancel</button></div>
+<div class="bottom"><span onclick="location.href='home.html'">🏠<br>Home</span><span onclick="location.href='messages.html'">💬<br>Messages</span><span class="on">▶️<br>Watch</span><span onclick="location.href='home.html'">👤<br>Profile</span></div>
+<script>
+let me=localStorage.getItem('zentrix_user')||'Your Name';
+let mePic=localStorage.getItem('zentrix_pic')||'';
+let BANNED=['porn','porno','xxx','sex','nude','naked','pussy','dick','penis','vagina','boobs','breast','erotic','adult','onlyfans','fuck','horny','suck'];
+function isBanned(t){ t=(t||'').toLowerCase(); return BANNED.find(w=>t.includes(w)); }
+function getPosts(){ try{return JSON.parse(localStorage.getItem('zentrix_posts')||'[]')}catch(e){return[]} }
+function getFollows(){ try{return JSON.parse(localStorage.getItem('zentrix_follows')||'[]')}catch(e){return[]} }
+function saveFollows(f){ localStorage.setItem('zentrix_follows',JSON.stringify(f)); }
+function getLikes(){ try{return JSON.parse(localStorage.getItem('zentrix_likes')||'{}')}catch(e){return{}} }
+function saveLikes(l){ localStorage.setItem('zentrix_likes',JSON.stringify(l)); }
+function getReported(){ try{return JSON.parse(localStorage.getItem('zentrix_reported')||'[]')}catch(e){return[]} }
+let curTab='For You', curSearch='';
+function setTab(t,el){ curTab=t; document.querySelectorAll('.tabs span').forEach(s=>s.classList.remove('on')); el.classList.add('on'); render(); }
+function doSearch(){ curSearch=document.getElementById('sIn').value.toLowerCase().trim(); render(); }
+function openUpload(){ document.getElementById('upChoice').style.display='block'; }
+function closeChoice(){ document.getElementById('upChoice').style.display='none'; }
+function goCamera(){ closeChoice(); let b=document.getElementById('upBox'); b.style.display='block'; let f=document.getElementById('fv'); f.setAttribute('capture','environment'); f.setAttribute('accept','video/*'); f.click(); }
+function goGallery(){ closeChoice(); let b=document.getElementById('upBox'); b.style.display='block'; let f=document.getElementById('fv'); f.removeAttribute('capture'); f.setAttribute('accept','video/mp4,video/*'); f.click(); }
+let tmpVideo='';
+function onVideo(inp){ let f=inp.files[0]; if(!f) return; if(isBanned(f.name)){ alert('🚫 BLOCKED: This file name contains banned adult content. Cannot upload.'); inp.value=''; return; } let r=new FileReader(); r.onload=e=>{ tmpVideo=e.target.result; let v=document.getElementById('prev'); v.src=tmpVideo; v.style.display='block'; }; r.readAsDataURL(f); }
+function doUpload(){ let cap=document.getElementById('cap').value.trim(); let bad=isBanned(cap); if(bad){ alert('🚫 BLOCKED: Your caption contains banned word: '+bad+'\n\nNO porn / NO naked / NO sex allowed on ZENTRIX.'); return; } if(!tmpVideo){ alert('Please choose an MP4 video first'); return; } let posts=getPosts(); posts.unshift({name:me,pic:mePic,text:cap,media:tmpVideo,mtype:'video',time:'Just now',audience:'Public',likes:0}); localStorage.setItem('zentrix_posts',JSON.stringify(posts)); alert('✅ Video Posted! Safe Check Passed.'); document.getElementById('cap').value=''; document.getElementById('fv').value=''; tmpVideo=''; openUpload(); render(); }
+<script>
+function render(){
+ let feed=document.getElementById('feed');
+ if(!feed) return;
+ let posts=getPosts();
+ // Demo videos if empty so you can SEE how it works
+ if(posts.length==0){
+   posts=[
+     {name:'Your Name',pic:'',text:'Kitwe Vibes 🔥 #Zambia #fyp',media:'',mtype:'video',time:'2h',audience:'Public',likes:128,cat:'music'},
+     {name:'Zentrix Star',pic:'',text:'New Music Drop 🎵 #music',media:'',mtype:'video',time:'1h',audience:'Public',likes:89,cat:'music'},
+     {name:'Copperbelt Queen',pic:'',text:'Live from Ndola ❤️',media:'',mtype:'video',time:'LIVE',audience:'Public',likes:245,cat:'live'},
+     {name:'Your Friend',pic:'',text:'Friends only vibes 💛',media:'',mtype:'video',time:'30m',audience:'Friends',likes:45,cat:'friends'}
+   ];
+ }
+ let follows=getFollows();
+ let likes=getLikes();
+ let reported=getReported();
+ let list=posts.filter(p=>!reported.includes(p.name+p.text));
+ if(curSearch) list=list.filter(p=>p.name.toLowerCase().includes(curSearch) || (p.text||'').toLowerCase().includes(curSearch));
+ if(curTab=='Following') list=list.filter(p=>follows.includes(p.name));
+ if(curTab=='Friends') list=list.filter(p=>follows.includes(p.name) || p.audience=='Friends' || p.cat=='friends');
+ if(curTab=='Music') list=list.filter(p=>(p.text||'').toLowerCase().includes('music')||(p.text||'').includes('🎵')||p.cat=='music');
+ if(curTab=='Live') list=list.filter(p=>p.time=='LIVE'||p.cat=='live');
+ if(list.length==0){
+   feed.innerHTML='<div style="height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center"><div style="font-size:50px">🎬</div><h3 style="margin:12px 0 6px">No videos in '+curTab+'</h3><p style="color:#999;font-size:13px;line-height:1.6">Tap the red + button to post your first video<br>or tap Follow on For You videos to see them here.</p><button onclick="setTab(\'For You\',document.querySelector(\'.tabs span\'))" style="margin-top:16px;background:#D90429;color:#fff;border:0;padding:12px 20px;border-radius:99px;font-weight:800">Go to For You</button></div>';
+   return;
+ }
+ feed.innerHTML=list.map((p,i)=>{
+   let key=p.name+p.text;
+   let isLiked=likes[key]?1:0;
+   let isFollow=follows.includes(p.name);
+   let mediaHtml=p.media?'<video src="'+p.media+'" controls playsinline loop style="background:#000"></video>':'<div style="width:100%;height:100%;background:linear-gradient(135deg,#1A0A12,#3A0A1A);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center"><div style="font-size:70px">🎬</div><div style="font-size:18px;font-weight:800;margin-top:12px">'+p.text+'</div><div style="color:#FF8FA3;font-size:12px;margin-top:6px">'+(p.time=='LIVE'?'🔴 LIVE NOW':'Tap play on real videos')+'</div></div>';
+   return '<div class="card">'+mediaHtml+'<div class="overlay"><div class="user"><div class="ava">'+(p.pic?'<img src="'+p.pic+'">':p.name.charAt(0).toUpperCase())+'</div><div><b>@'+p.name+'</b><div style="font-size:11px;color:#ccc">'+p.time+' • '+p.audience+'</div></div>'+(p.name!=me?'<button class="follow '+(isFollow?'on':'')+'" onclick="toggleFollow(\''+p.name+'\')">'+(isFollow?'Following':'Follow')+'</button>':'')+'</div><p style="margin-top:10px;font-size:14px;line-height:1.5">'+p.text+'</p><div style="display:flex;gap:10px;margin-top:10px"><span style="background:rgba(255,255,255,.15);padding:6px 10px;border-radius:99px;font-size:11px">'+(p.time=='LIVE'?'🔴 LIVE':'▶️ Watch')+'</span><span style="background:rgba(255,255,255,.15);padding:6px 10px;border-radius:99px;font-size:11px">#Zentrix</span></div></div><div class="actions"><div class="actWrap"><div class="act" onclick="toggleLike(\''+key+'\')" style="'+(isLiked?'background:#D90429;':'')+'">'+(isLiked?'❤️':'🤍')+'</div>'+(p.likes+(isLiked?1:0))+'</div><div class="actWrap"><div class="act" onclick="alert(\'Comments coming soon - like & share for now!\')">💬</div>12</div><div class="actWrap"><div class="act" onclick="navigator.share?navigator.share({text:\''+p.text+'\'}):alert(\'Link copied!\')">↗️</div>Share</div><div class="actWrap"><div class="act" onclick="reportPost(\''+key+'\')">🚩</div>Report</div></div></div>';
+ }).join('');
+}
+function toggleFollow(name){ let f=getFollows(); if(f.includes(name)){ f=f.filter(x=>x!=name); } else { f.push(name); alert('✅ Following @'+name); } saveFollows(f); render(); }
+function toggleLike(key){ let l=getLikes(); if(l[key]) delete l[key]; else l[key]=1; saveLikes(l); render(); }
+function reportPost(key){ if(confirm('Report this video? It will be hidden and reviewed for safety.')){ let r=getReported(); r.push(key); localStorage.setItem('zentrix_reported',JSON.stringify(r)); alert('✅ Reported. Thank you for keeping ZENTRIX safe.'); render(); } }
+render();
+</script>

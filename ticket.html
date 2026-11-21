@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZENTRIX - Ticket Zed</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial;background:#0B0B12;color:#fff}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:10px;padding:12px;align-items:center;background:rgba(11,11,18,.95);border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{font-weight:900;font-size:22px;color:#fff}.logo i{color:#FF6B00;font-style:normal}
+.search{flex:1;background:rgba(255,255,255,.12);border-radius:99px;padding:9px 12px;display:flex;gap:8px;align-items:center}
+.search input{border:0;outline:0;width:100%;background:transparent;color:#fff}
+.search input::placeholder{color:rgba(255,255,255,.6)}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px}.cat{white-space:nowrap;padding:9px 16px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;font-size:13px;font-weight:700;cursor:pointer}.cat.on{background:linear-gradient(135deg,#7C3AED,#FF6B00);color:#fff;border-color:transparent}
+.hero{margin:0 12px 12px;background:linear-gradient(135deg,#2D0A4E,#7C3AED 45%,#FF6B00);border-radius:20px;padding:20px;color:#fff;box-shadow:0 10px 25px rgba(15,27,45,.15)}
+.hero h2{font-size:22px}.hero p{font-size:13px;opacity:.85;margin:8px 0 12px}.hero button{background:#fff;color:#111;border:0;padding:11px 16px;border-radius:99px;font-weight:800}
+.card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);color:#fff;border-radius:18px;margin:0 12px 12px;overflow:hidden;box-shadow:0 2px 12px rgba(15,27,45,.06)}
+.card img{width:100%;height:150px;object-fit:cover;background:#eee}
+.pad{padding:12px}
+.wa{display:block;text-align:center;background:#25D366;color:#fff;padding:10px;border-radius:99px;font-weight:800;font-size:13px;text-decoration:none;margin-top:10px}
+.buy{display:block;text-align:center;background:linear-gradient(135deg,#7C3AED,#FF6B00);color:#fff;padding:10px;border-radius:99px;font-weight:800;font-size:13px;text-decoration:none;margin-top:8px}
+.upload{background:#17171F;border-radius:18px;padding:16px;margin:12px;display:none;border:1px solid rgba(255,255,255,.15);color:#fff}
+.upload input,.upload select{width:100%;padding:11px;border:1px solid #ddd;border-radius:12px;margin-top:8px}
+.btn{border:0;padding:12px;border-radius:12px;font-weight:800;width:100%}.btnP{background:#FF6B00;color:#fff}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#0B0B12;display:flex;justify-content:space-around;padding:12px 0 14px;border-top:1px solid rgba(255,255,255,.08);z-index:20}
+.bottom span{text-align:center;font-size:11px;color:#999;font-weight:700}.bottom span.on{color:#FF6B00}
+</style></head><body>
+<div class="top"><div class="logo">ZENTRIX<i>.</i></div><div class="search">🔍<input id="sIn" placeholder="Search event, concert, artist..." oninput="render()"></div></div>
+<div class="cats" id="cats"></div>
+<div class="hero"><div style="font-size:11px;letter-spacing:3px;color:#FFB800;font-weight:800">COPPERBELT • LIVE EVENTS</div><h2 style="font-size:32px;line-height:1.1;margin-top:6px">Ticket<br>Zed 🎟️</h2><p>Discover events, concerts & activities in Kitwe, Ndola & Copperbelt. Buy from official sellers.</p><button onclick="openAdd()">+ Add Your Event</button></div>
+<div class="upload" id="addBox">
+<b>Add Event / Concert</b>
+<input id="eName" placeholder="Event name, e.g. Copperbelt Music Fest">
+<input id="eDate" type="date">
+<input id="eLoc" placeholder="Location, e.g. Kitwe Stadium">
+<select id="eCat"><option>Concert</option><option>Party</option><option>Church / Gospel</option><option>Football / Sport</option><option>Comedy / Show</option><option>Other Event</option></select>
+<input id="ePrice" type="number" placeholder="Ticket price in Kwacha, e.g. 150">
+<input id="eWa" placeholder="Official seller WhatsApp, e.g. Enter phone number">
+<input type="file" id="eImg" accept="image/*" onchange="onImg(this)">
+<img id="ePrev" style="width:100%;border-radius:12px;display:none;margin-top:8px">
+<button class="btn btnP" style="margin-top:10px" onclick="doAdd()">Post Event - FREE</button>
+<button class="btn" style="background:#eee;margin-top:8px" onclick="openAdd()">Cancel</button>
+</div>
+<h3 style="padding:0 12px 10px;color:#fff">🔥 Upcoming Events <span style="font-size:12px;color:#FF6B00">• THIS WEEKEND IN COPPERBELT</span></h3>
+<div id="list" style="padding-bottom:90px"></div>
+<div class="bottom"><span onclick="location.href='home.html'">🏠<br>Home</span><span onclick="location.href='market.html'">🛒<br>Market</span><span onclick="location.href='food.html'">🍔<br>Food</span><span class="on">🎟️<br>Tickets</span><span onclick="location.href='watch.html'">▶️<br>Watch</span></div>
+<script>
+let CATS=['All','Concert','Party','Church / Gospel','Football / Sport','Comedy / Show'];
+let curCat='All'; let tmpImg='';
+function getE(){ try{return JSON.parse(localStorage.getItem('zentrix_tickets')||'[]')}catch(e){return[]} }
+function saveE(r){ localStorage.setItem('zentrix_tickets',JSON.stringify(r)); }
+function renderCats(){ document.getElementById('cats').innerHTML=CATS.map(c=>'<div class="cat '+(c==curCat?'on':'')+'" onclick="setCat(\''+c+'\')">'+c+'</div>').join(''); }
+function setCat(c){ curCat=c; renderCats(); render(); }
+function openAdd(){ let b=document.getElementById('addBox'); if(b.style.display=='block'){ b.style.display='none'; return; } b.style.display='block'; b.style.border='2px solid #00A651'; setTimeout(()=>{ b.scrollIntoView({behavior:'smooth',block:'start'}); document.getElementById('eName').focus(); },100); setTimeout(()=>{ b.style.border='1px solid #E5E9EF'; },2500); }
+function onImg(i){ let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ tmpImg=e.target.result; let im=document.getElementById('ePrev'); im.src=tmpImg; im.style.display='block'; }; r.readAsDataURL(f); }
+function doAdd(){
+ let name=document.getElementById('eName').value.trim(); let date=document.getElementById('eDate').value; let loc=document.getElementById('eLoc').value.trim(); let cat=document.getElementById('eCat').value; let price=document.getElementById('ePrice').value.trim(); let wa=document.getElementById('eWa').value.trim();
+ if(!name){ alert('Enter event name'); return; }
+ if(!date){ alert('Pick event date'); return; }
+ if(!loc){ alert('Enter location'); return; }
+ if(!price){ alert('Enter ticket price in Kwacha'); return; }
+ if(!wa){ alert('Enter official seller WhatsApp'); return; }
+ let cleanWa=wa.replace(/[^0-9]/g,''); if(cleanWa.startsWith('0')) cleanWa='260'+cleanWa.slice(1);
+ let list=getE(); list.unshift({name:name,date:date,loc:loc,cat:cat,price:price,wa:cleanWa,img:tmpImg});
+ saveE(list); alert('✅ Event posted in '+cat); document.getElementById('eName').value=''; document.getElementById('eDate').value=''; document.getElementById('eLoc').value=''; document.getElementById('ePrice').value=''; document.getElementById('eWa').value=''; tmpImg=''; openAdd(); render();
+}
+function render(){
+ renderCats(); let list=getE(); let q=(document.getElementById('sIn').value||'').toLowerCase();
+ if(curCat!='All') list=list.filter(e=>e.cat==curCat);
+ if(q) list=list.filter(e=>(e.name+' '+e.loc+' '+e.cat).toLowerCase().includes(q));
+ let el=document.getElementById('list');
+ if(list.length==0){
+   el.innerHTML='<div style="background:#fff;border:1px dashed #ddd;border-radius:18px;padding:30px 20px;text-align:center;margin:0 12px"><div style="font-size:50px">🎟️</div><h3 style="margin:12px 0 6px">No events yet in '+curCat+'</h3><p style="color:#8A94A6;font-size:13px;line-height:1.6">Nobody has posted an event yet.<br>Be the first to post in Copperbelt!</p><button onclick="openAdd()" style="margin-top:16px;background:linear-gradient(135deg,#7C3AED,#FF6B00);color:#fff;border:0;padding:12px 22px;border-radius:99px;font-weight:800">+ Post First Event</button></div>';
+   return;
+ }
+ el.innerHTML=list.map(e=>{
+   let img=e.img?e.img:'https://via.placeholder.com/600x300?text='+encodeURIComponent(e.name);
+   let msg=encodeURIComponent('Hi! I saw '+e.name+' on ZENTRIX Ticket Zed. I want to buy a ticket for K'+e.price+'. Is it still available?');
+   return '<div class="card"><img src="'+img+'"><div class="pad"><div style="display:flex;justify-content:space-between"><b>'+e.name+'</b><span style="background:#E6F6EE;color:#00A651;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:800">'+e.cat+'</span></div><div style="font-size:12px;color:#8A94A6;margin:6px 0">📅 '+e.date+' • 📍 '+e.loc+'</div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span>Ticket</span><b style="font-size:18px">K '+e.price+'</b></div><a class="buy" href="https://wa.me/'+e.wa+'?text='+msg+'" target="_blank">🎟️ Buy Ticket - WhatsApp Official Seller</a><div style="text-align:center;font-size:11px;color:#8A94A6;margin-top:6px">✅ Verified Official Seller</div></div></div>';
+ }).join('');
+}
+render();
+</script><script>
+var M={home:'index.html',messages:'messages.html',msg:'messages.html',watch:'watch.html',market:'market.html',shop:'market.html',food:'food.html',tickets:'ticket.html',ticket:'ticket.html',suppliers:'suppliers.html'};
+document.addEventListener('click',function(e){
+ var t=e.target.closest('a,button,div,span');
+ if(!t) return;
+ var txt=t.textContent.trim().toLowerCase();
+ for(var k in M){ if(txt===k){ e.preventDefault(); e.stopPropagation(); location.href=M[k]; return; } }
+},true);
+window.alert=function(m){ if(String(m).includes('coming soon')) return; };
+</script></body></html>

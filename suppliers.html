@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZENTRIX - Suppliers Connect | Wholesale Zambia</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',system-ui,Arial;background:#F3F5F4;color:#12211D}
+.top{position:sticky;top:0;z-index:30;display:flex;gap:10px;padding:10px 12px;align-items:center;background:#fff;border-bottom:1px solid #E3EBE8;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.logo{font-weight:900;font-size:22px;color:#0A2E26;letter-spacing:-.5px}.logo i{color:#0D9488;font-style:normal}.logo small{display:block;font-size:9px;letter-spacing:2px;color:#8A9A93;font-weight:700}
+.search{flex:1;background:#EEF2F0;border:1px solid #E3EBE8;border-radius:99px;padding:9px 12px;display:flex;gap:8px;align-items:center}
+.search input{border:0;outline:0;width:100%;background:transparent;font-size:13px}
+.trust{display:flex;justify-content:space-between;padding:12px;background:#fff;margin:10px 12px;border-radius:16px;border:1px solid #E3EBE8}
+.trust div{text-align:center;flex:1}.trust b{font-size:15px;color:#0A2E26}.trust span{font-size:10px;color:#8A9A93;display:block;margin-top:2px}
+.hero{margin:0 12px 12px;background:#0A2E26;border-radius:22px;padding:22px;color:#fff;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;right:-40px;top:-40px;width:150px;height:150px;background:radial-gradient(circle,#0D9488 0%,transparent 70%);opacity:.7}
+.hero h1{font-size:26px;line-height:1.15;position:relative}.hero h1 em{color:#F59E0B;font-style:normal}.hero p{font-size:13px;opacity:.85;margin:10px 0 14px;line-height:1.6;position:relative}
+.hero button{background:#F59E0B;color:#111;border:0;padding:12px 18px;border-radius:99px;font-weight:800;position:relative;box-shadow:0 6px 18px rgba(245,158,11,.35)}
+.hero .sub{position:relative;font-size:11px;opacity:.7;margin-top:10px}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:0 12px 12px;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}
+.cat{white-space:nowrap;padding:9px 15px;border-radius:99px;background:#fff;border:1px solid #E3EBE8;font-size:12px;font-weight:700;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.03)}.cat.on{background:#0A2E26;color:#fff}
+.section{padding:0 12px 8px;display:flex;justify-content:space-between;align-items:center}.section b{font-size:15px}.section a{font-size:12px;color:#0D9488;font-weight:700;text-decoration:none}
+.card{background:#fff;border:1px solid #E3EBE8;border-radius:18px;margin:0 12px 12px;padding:0;overflow:hidden;box-shadow:0 4px 16px rgba(10,46,38,.06)}
+.cardTop{display:flex;gap:12px;padding:14px}
+.avatar{width:52px;height:52px;border-radius:14px;background:#0A2E26;color:#fff;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;flex-shrink:0}
+.meta{flex:1}.meta b{font-size:15px}.meta .loc{font-size:12px;color:#8A9A93;margin:2px 0}.stars{font-size:11px;color:#F59E0B}
+.badge{display:inline-block;background:#E0F2F1;color:#0D9488;font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px}
+.details{background:#F8FAF9;margin:0 14px 12px;border-radius:12px;padding:12px}
+.row{display:flex;justify-content:space-between;padding:5px 0;font-size:13px}.row span{color:#666}.row b{color:#12211D}
+.actions{display:flex;gap:8px;padding:0 14px 14px}.wa{flex:1;text-align:center;background:#25D366;color:#fff;padding:11px;border-radius:99px;font-weight:800;font-size:12px;text-decoration:none}.quote{flex:1;text-align:center;background:#0A2E26;color:#fff;padding:11px;border-radius:99px;font-weight:800;font-size:12px;text-decoration:none}
+.upload{background:#fff;border-radius:18px;padding:18px;margin:12px;display:none;border:1px solid #E3EBE8;box-shadow:0 8px 25px rgba(0,0,0,.08)}
+.upload input,.upload select{width:100%;padding:12px;border:1px solid #ddd;border-radius:12px;margin-top:8px;font-size:14px}
+.btn{border:0;padding:13px;border-radius:12px;font-weight:800;width:100%}.btnP{background:#0D9488;color:#fff}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;justify-content:space-around;padding:12px 0 14px;border-top:1px solid #E3EBE8;z-index:20}
+.bottom span{text-align:center;font-size:11px;color:#8A9A93;font-weight:700}.bottom span.on{color:#0A2E26}
+</style></head><body>
+<div class="top"><div class="logo">ZENTRIX<i>.</i><small>SUPPLIERS CONNECT</small></div><div class="search">🔍<input id="sIn" placeholder="Search wholesale..." oninput="render()"></div><span style="font-size:18px">🔔</span></div>
+<div class="trust"><div><b>500+</b><span>Verified Suppliers</span></div><div style="border-left:1px solid #eee;border-right:1px solid #eee"><b>2,400+</b><span>Shops Connected</span></div><div><b>4.9 ⭐</b><span>Trusted Rating</span></div></div>
+<div class="hero"><h1>Wholesale in Zambia,<br><em>Without Middlemen.</em></h1><p>Find manufacturers & wholesalers in Kitwe, Lusaka & Ndola. Compare prices, order in bulk, grow your shop.</p><button onclick="openAdd()">+ Register As Supplier — Free</button><div class="sub">✓ Verified • ✓ Fast Response • ✓ Secure WhatsApp Ordering</div></div>
+<div class="cats" id="cats"></div>
+<div class="upload" id="addBox">
+<b style="font-size:17px">Register As Supplier / Manufacturer</b><p style="font-size:12px;color:#666;margin-top:4px">Join 500+ verified suppliers. Shops will find you.</p>
+<input id="sName" placeholder="Business name">
+<select id="sCat"><option>Clothing & Chitenge</option><option>Phones & Accessories</option><option>Food & Groceries Bulk</option><option>Beauty & Cosmetics</option><option>Electronics</option><option>Other Wholesale</option></select>
+<input id="sProduct" placeholder="What you supply, e.g. Chitenge 100pcs">
+<input id="sPrice" type="number" placeholder="Wholesale price per unit (K)">
+<input id="sMoq" type="number" placeholder="Minimum order (pcs)">
+<input id="sLoc" placeholder="Location, e.g. Chisokone, Kitwe">
+<input id="sWa" placeholder="WhatsApp number">
+<label style="display:block;font-size:12px;font-weight:700;margin-top:10px;color:#0A2E26">📸 Business / Product Photo</label>
+<input type="file" id="sImg" accept="image/*" onchange="onImg(this)">
+<img id="sPrev" style="width:100%;border-radius:12px;display:none;margin-top:8px;max-height:180px;object-fit:cover">
+<button class="btn btnP" style="margin-top:10px" onclick="doAdd()">Register Supplier — FREE</button>
+<button class="btn" style="background:#eee;margin-top:8px" onclick="openAdd()">Cancel</button>
+</div>
+<div class="section"><b>⭐ Featured Suppliers</b><a href="#" onclick="return false">View All →</a></div>
+<div id="list" style="padding-bottom:90px"></div>
+<div class="bottom"><span onclick="location.href='home.html'">🏠<br>Home</span><span onclick="location.href='market.html'">🛒<br>Market</span><span onclick="location.href='food.html'">🍔<br>Food</span><span onclick="location.href='ticket.html'">🎟️<br>Tickets</span><span class="on">🏭<br>Suppliers</span></div>
+<script>
+let CATS=['All','Clothing & Chitenge','Phones & Accessories','Food & Groceries Bulk','Beauty & Cosmetics','Electronics'];
+let curCat='All'; let tmpImg=''; function onImg(i){ let f=i.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ tmpImg=e.target.result; let im=document.getElementById('sPrev'); im.src=tmpImg; im.style.display='block'; }; r.readAsDataURL(f); }
+let DEMO=[
+ {name:"Copperbelt Chitenge Wholesalers",cat:"Clothing & Chitenge",prod:"Premium Chitenge — 6 Yards, Assorted Colours",price:"85",moq:"20",loc:"Chisokone Market, Kitwe",wa:"26Enter phone number",rating:"4.9",reviews:"312",delivery:"Same Day • Kitwe",initial:"C"},
+ {name:"Kitwe Phone Accessories Hub",cat:"Phones & Accessories",prod:"Phone Cases, Chargers, Earphones — Bulk Pack",price:"45",moq:"50",loc:"Kitwe Town Centre",wa:"26Enter phone number",rating:"4.8",reviews:"198",delivery:"Next Day Delivery",initial:"K"},
+ {name:"ZamBulk Foods Ltd",cat:"Food & Groceries Bulk",prod:"Rice 25kg, Cooking Oil 20L, Sugar 10kg",price:"480",moq:"10",loc:"Ndola Industrial Area",wa:"26Enter phone number",rating:"4.9",reviews:"421",delivery:"Countrywide Delivery",initial:"Z"}
+];
+function getS(){ try{let s=JSON.parse(localStorage.getItem('zentrix_suppliers')||'[]'); return s.length?s:DEMO}catch(e){return DEMO} }
+function saveS(r){ localStorage.setItem('zentrix_suppliers',JSON.stringify(r)); }
+function renderCats(){ document.getElementById('cats').innerHTML=CATS.map(c=>'<div class="cat '+(c==curCat?'on':'')+'" onclick="setCat(\''+c+'\')">'+c+'</div>').join(''); }
+function setCat(c){ curCat=c; renderCats(); render(); }
+function openAdd(){ let b=document.getElementById('addBox'); if(b.style.display=='block'){ b.style.display='none'; return; } b.style.display='block'; b.style.border='2px solid #0D9488'; setTimeout(()=>{ b.scrollIntoView({behavior:'smooth',block:'start'}); },100); }
+function doAdd(){
+ let name=document.getElementById('sName').value.trim(); let cat=document.getElementById('sCat').value; let prod=document.getElementById('sProduct').value.trim(); let price=document.getElementById('sPrice').value.trim(); let moq=document.getElementById('sMoq').value.trim(); let loc=document.getElementById('sLoc').value.trim(); let wa=document.getElementById('sWa').value.trim();
+ if(!name||!prod||!price||!moq||!loc||!wa){ alert('Please fill all fields'); return; }
+ let cleanWa=wa.replace(/[^0-9]/g,''); if(cleanWa.startsWith('0')) cleanWa='260'+cleanWa.slice(1);
+ let list=getS(); if(list==DEMO) list=[];
+ list.unshift({name:name,cat:cat,prod:prod,price:price,moq:moq,loc:loc,wa:cleanWa,img:tmpImg,rating:"5.0",reviews:"New",delivery:"Fast Response",initial:name[0].toUpperCase()});
+ saveS(list); alert('✅ Supplier registered!'); tmpImg=''; document.getElementById('sPrev').style.display='none'; document.getElementById('sImg').value=''; openAdd(); render();
+}
+function render(){
+ renderCats(); let list=getS(); let q=(document.getElementById('sIn').value||'').toLowerCase();
+ if(curCat!='All') list=list.filter(s=>s.cat==curCat);
+ if(q) list=list.filter(s=>(s.name+' '+s.prod+' '+s.cat+' '+s.loc).toLowerCase().includes(q));
+ let el=document.getElementById('list');
+ if(list.length==0){ el.innerHTML='<div style="background:#fff;border:1px dashed #ccc;border-radius:18px;padding:30px 20px;text-align:center;margin:0 12px"><h3>No suppliers yet</h3><p style="color:#888;font-size:13px;margin-top:6px">Be the first in this category</p><button onclick="openAdd()" style="margin-top:14px;background:#0D9488;color:#fff;border:0;padding:12px 22px;border-radius:99px;font-weight:800">+ Register Now</button></div>'; return; }
+ el.innerHTML=list.map(s=>{
+   let msg=encodeURIComponent('Hi '+s.name+'! I saw you on ZENTRIX Suppliers Connect. I want wholesale: '+s.prod+'. Best price for '+s.moq+' pcs?');
+   return '<div class="card">'+(s.img?'<img src="'+s.img+'" style="width:100%;height:150px;object-fit:cover;display:block">':'')+'<div class="cardTop"><div class="avatar">'+(s.initial||'S')+'</div><div class="meta"><b>'+s.name+'</b> <span class="badge">✅ Verified Supplier</span><div class="loc">📍 '+s.loc+'</div><div class="stars">⭐ '+s.rating+' ('+s.reviews+' reviews) • 🚚 '+s.delivery+'</div></div></div><div class="details"><div style="font-size:13px"><b>'+s.prod+'</b></div><div style="font-size:11px;color:#8A9A93;margin-top:2px">'+s.cat+'</div><div class="row"><span>Wholesale Price</span><b style="font-size:16px;color:#0A2E26">K '+s.price+' / unit</b></div><div class="row"><span>Minimum Order</span><b>'+s.moq+' pcs</b></div><div class="row"><span>Response Time</span><b style="color:#0D9488">~ 10 mins</b></div></div><div class="actions"><a class="quote" href="https://wa.me/'+s.wa+'?text='+msg+'" target="_blank">📩 Request Quote</a><a class="wa" href="https://wa.me/'+s.wa+'?text='+msg+'" target="_blank">💬 WhatsApp</a></div></div>';
+ }).join('');
+}
+render();
+</script><script>
+var M={home:'index.html',messages:'messages.html',msg:'messages.html',watch:'watch.html',market:'market.html',shop:'market.html',food:'food.html',tickets:'ticket.html',ticket:'ticket.html',suppliers:'suppliers.html'};
+document.addEventListener('click',function(e){
+ var t=e.target.closest('a,button,div,span');
+ if(!t) return;
+ var txt=t.textContent.trim().toLowerCase();
+ for(var k in M){ if(txt===k){ e.preventDefault(); e.stopPropagation(); location.href=M[k]; return; } }
+},true);
+window.alert=function(m){ if(String(m).includes('coming soon')) return; };
+</script></body></html>

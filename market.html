@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ZENTRIX Marketplace</title>
+<style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Segoe UI',Arial;background:#F2F4F7;color:#0F1B2D}
+.top{position:sticky;top:0;z-index:20;display:flex;gap:10px;padding:12px;align-items:center;background:rgba(255,255,255,.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.08)}
+.logo{font-weight:900;font-size:22px;background:linear-gradient(135deg,#0F1B2D,#0A3D2E);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.search{flex:1;background:#EEF1F4;border-radius:99px;padding:9px 12px;display:flex;gap:8px;align-items:center}
+.search input{border:0;outline:0;width:100%;background:transparent;color:#0F1B2D}
+.search input::placeholder{color:#8A94A6}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:12px;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}
+.cat{white-space:nowrap;padding:9px 16px;border-radius:99px;background:#fff;border:1px solid #E5E9EF;font-size:13px;font-weight:700;cursor:pointer}
+.cat.on{background:linear-gradient(135deg,#0F1B2D,#0A3D2E);border-color:transparent}
+.hero{margin:12px;background:linear-gradient(135deg,#0F1B2D 0%,#143A2E 100%);border-radius:20px;padding:20px;box-shadow:0 10px 25px rgba(15,27,45,.15);position:relative;overflow:hidden}
+.hero h2{font-size:22px;line-height:1.2}.hero p{font-size:13px;opacity:.9;margin:8px 0 12px}
+.hero button{background:#FFB800;color:#0F1B2D;border:0;padding:11px 16px;border-radius:99px;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 12px 90px}
+.card{background:#fff;border:1px solid #E5E9EF;box-shadow:0 2px 12px rgba(15,27,45,.06);border-radius:16px;overflow:hidden}
+.card img{width:100%;height:140px;object-fit:cover;background:#222}
+.card .pad{padding:10px}
+.price{color:#0F1B2D;font-weight:900;font-size:16px}
+.wa{display:block;text-align:center;background:#25D366;color:#fff;padding:9px;border-radius:99px;font-weight:800;font-size:12px;text-decoration:none;margin-top:8px}
+.upload{background:#fff;color:#111;margin:12px;border-radius:18px;padding:16px;display:none}
+.upload input,.upload select,.upload textarea{width:100%;padding:11px;border:1px solid #ddd;border-radius:12px;margin-top:8px}
+.btn{border:0;padding:12px;border-radius:12px;font-weight:800;width:100%}.btnP{background:linear-gradient(135deg,#0F1B2D,#0A3D2E);color:#fff}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);display:flex;justify-content:space-around;padding:12px 0 14px;border-top:1px solid #E5E9EF;z-index:20}
+.bottom span{text-align:center;font-size:11px;color:#8A94A6;font-weight:700}.bottom span.on{color:#fff}
+
+</style></head><body>
+<div class="top"><div class="logo">ZENTRIX.</div><div class="search">🔍<input id="sIn" placeholder="Search product, shop, phone..." oninput="render()"></div></div>
+<div class="cats" id="cats"></div>
+<div class="hero"><h2>Soko Yatu, Pa Phone Yatu 🛒</h2><p>Buy from shops in Kitwe, Ndola & Copperbelt. Message seller direct on WhatsApp.</p><button onclick="openSell()">+ Sell Your Product</button></div>
+<h3 style="padding:0 12px 8px">✨ Newly Added Today</h3>
+<div class="upload" id="sellBox">
+<b>Register Business & Upload Product</b>
+<input id="pName" placeholder="Product name, e.g. iPhone 11">
+<input id="pPrice" type="number" placeholder="Price in Kwacha, e.g. 4500">
+<select id="pCat"><option>Phones & Tech</option><option>Fashion & Clothing</option><option>Food & Restaurant</option><option>Home & Other</option></select>
+<input id="pShop" placeholder="Your Shop Name">
+<input id="pWa" placeholder="Your WhatsApp number, e.g. Enter phone number">
+<input type="file" id="pImg" accept="image/*" onchange="onImg(this)">
+<img id="pPrev" style="width:100%;border-radius:12px;display:none;margin-top:8px">
+<button class="btn btnP" style="margin-top:10px" onclick="doAdd()">Post Product - FREE</button>
+<button class="btn" style="background:#eee;margin-top:8px" onclick="openSell()">Cancel</button>
+</div>
+<div class="grid" id="grid"></div>
+
+<div class="bottom"><span onclick="location.href='home.html'">🏠<br>Home</span><span onclick="location.href='messages.html'">💬<br>Messages</span><span onclick="location.href='watch.html'">▶️<br>Watch</span><span class="on">🛒<br>Market</span><span onclick="location.href='home.html'">👤<br>Profile</span></div>
+<script>
+let me=localStorage.getItem('zentrix_user')||'Your Name';
+let CATS=['All','Phones & Tech','Fashion & Clothing','Food & Restaurant','Home & Other'];
+let curCat='All';
+let tmpImg='';
+function getProducts(){ try{return JSON.parse(localStorage.getItem('zentrix_market')||'[]')}catch(e){return[]} }
+function saveProducts(p){ localStorage.setItem('zentrix_market',JSON.stringify(p)); }
+function renderCats(){
+ document.getElementById('cats').innerHTML=CATS.map(c=>'<div class="cat '+(c==curCat?'on':'')+'" onclick="setCat(\''+c+'\')">'+c+'</div>').join('');
+}
+function setCat(c){ curCat=c; renderCats(); render(); }
+function openSell(){ let b=document.getElementById('sellBox'); b.style.display=b.style.display=='block'?'none':'block'; window.scrollTo({top:0,behavior:'smooth'}); }
+function onImg(inp){ let f=inp.files[0]; if(!f) return; let r=new FileReader(); r.onload=e=>{ tmpImg=e.target.result; let im=document.getElementById('pPrev'); im.src=tmpImg; im.style.display='block'; }; r.readAsDataURL(f); }
+function doAdd(){
+ let name=document.getElementById('pName').value.trim();
+ let price=document.getElementById('pPrice').value.trim();
+ let cat=document.getElementById('pCat').value;
+ let shop=document.getElementById('pShop').value.trim()||me;
+ let wa=document.getElementById('pWa').value.trim();
+ if(!name){ alert('Please enter product name'); return; }
+ if(!price){ alert('Please enter price in Kwacha'); return; }
+ if(!cat){ alert('Please choose a CATEGORY'); return; }
+ if(!wa){ alert('Please enter your WhatsApp number so buyers can message you'); return; }
+ let cleanWa=wa.replace(/[^0-9]/g,''); if(cleanWa.startsWith('0')) cleanWa='260'+cleanWa.slice(1); if(cleanWa.startsWith('77')||cleanWa.startsWith('76')) cleanWa='260'+cleanWa;
+ let list=getProducts();
+ list.unshift({name:name,price:price,cat:cat,shop:shop,wa:cleanWa,img:tmpImg,time:'Just now'});
+ saveProducts(list);
+ alert('✅ Posted! Your product is now in '+cat+' and Newly Added.');
+ document.getElementById('pName').value=''; document.getElementById('pPrice').value=''; document.getElementById('pWa').value=''; document.getElementById('pShop').value=''; tmpImg=''; document.getElementById('pPrev').style.display='none';
+ openSell(); render();
+}
+function render(){
+ renderCats();
+ let list=getProducts();
+ let q=(document.getElementById('sIn').value||'').toLowerCase();
+ if(curCat!='All') list=list.filter(p=>p.cat==curCat);
+ if(q) list=list.filter(p=>(p.name+' '+p.shop+' '+p.cat).toLowerCase().includes(q));
+ let grid=document.getElementById('grid');
+ if(list.length==0){
+   grid.innerHTML='<div style="grid-column:1/-1;background:#12121A;border:1px dashed rgba(255,255,255,.2);border-radius:18px;padding:30px 20px;text-align:center"><div style="font-size:50px">🛒</div><h3 style="margin:12px 0 6px">No products yet in '+curCat+'</h3><p style="color:#8A94A6;font-size:13px;line-height:1.6">Nobody has posted anything yet.<br>Be the FIRST seller in Kitwe!</p><button onclick="openSell()" style="margin-top:16px;background:linear-gradient(135deg,#0F1B2D,#0A3D2E);color:#fff;border:0;padding:12px 22px;border-radius:99px;font-weight:800">+ Post First Product - FREE</button></div>';
+   return;
+ }
+ grid.innerHTML=list.map(p=>{
+   let img=p.img?p.img:'https://via.placeholder.com/400x300?text='+encodeURIComponent(p.name);
+   let msg=encodeURIComponent('Hi '+p.shop+'! I saw your '+p.name+' for K'+p.price+' on ZENTRIX Marketplace. Is it still available?');
+   return '<div class="card"><img src="'+img+'"><div class="pad"><b style="font-size:14px">'+p.name+'</b><div style="font-size:11px;color:#8A94A6;margin:3px 0">'+p.shop+' • '+p.time+'</div><div style="display:inline-block;background:#00A651,.15);color:#FFB800;font-size:10px;padding:3px 8px;border-radius:99px">'+p.cat+'</div><div class="price" style="margin-top:6px">K '+p.price+'</div><a class="wa" href="https://wa.me/'+p.wa+'?text='+msg+'" target="_blank">💬 WhatsApp Seller</a></div></div>';
+ }).join('');
+}
+render();
+</script>
+<script>
+var M={home:'index.html',messages:'messages.html',msg:'messages.html',watch:'watch.html',market:'market.html',shop:'market.html',food:'food.html',tickets:'ticket.html',ticket:'ticket.html',suppliers:'suppliers.html'};
+document.addEventListener('click',function(e){
+ var t=e.target.closest('a,button,div,span');
+ if(!t) return;
+ var txt=t.textContent.trim().toLowerCase();
+ for(var k in M){ if(txt===k){ e.preventDefault(); e.stopPropagation(); location.href=M[k]; return; } }
+},true);
+window.alert=function(m){ if(String(m).includes('coming soon')) return; };
+</script></body></html>
